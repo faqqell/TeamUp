@@ -9,6 +9,7 @@ import { getVenues } from '../api/venues'
 import { getWalletMe } from '../api/wallet'
 import { getDemoEvents, getDemoPlayerStats, getDemoWallet, isDemoToken } from '../demo/demoData'
 import { getUserDisplayName } from '../utils/userDisplay'
+import Icon, { SportIcon } from '../components/Icon'
 
 export default function Home({ user, token, effectiveRole }) {
  const [events, setEvents] = useState([])
@@ -70,14 +71,6 @@ export default function Home({ user, token, effectiveRole }) {
   return 'game'
  }
 
- const sportIconMap = {
-  game: '🎮',
-  football: '⚽',
-  basketball: '🏀',
-  volleyball: '🏐',
-  tennis: '🎾',
- }
-
  if (effectiveRole === 'partner') {
   const stats = partnerStats || {
    total_bookings: 0,
@@ -94,7 +87,7 @@ export default function Home({ user, token, effectiveRole }) {
    <div className="dashboard-page">
     <div className="dashboard-toolbar">
      <div className="dashboard-toolbar-label">
-      {i18n.language.startsWith('ru') ? 'Язык интерфейса' : 'Interface language'}
+      {t('common.interfaceLanguage')}
      </div>
      <LanguageSwitcher className="dashboard-toolbar-switcher" />
     </div>
@@ -104,14 +97,14 @@ export default function Home({ user, token, effectiveRole }) {
       <h1>{t('dashboard.partnerWelcome')}</h1>
       <p className="page-subtitle">{t('dashboard.partnerSubtitle', { name: displayName })}</p>
      </div>
-     <Link to="/partner/venues" className="btn-primary glass-btn page-header-action">🏟️ {t('dashboard.manageVenues')}</Link>
+    <Link to="/partner/venues" className="btn-primary glass-btn page-header-action"><Icon name="building" size={18} /> {t('dashboard.manageVenues')}</Link>
     </div>
 
     <div className="stats-grid">
-     <div className="stat-card glass-card"><div className="stat-card-icon">📅</div><div className="stat-card-value">{stats.total_bookings}</div><div className="stat-card-label">{t('dashboard.totalBookings')}</div></div>
-     <div className="stat-card glass-card"><div className="stat-card-icon">🎮</div><div className="stat-card-value">{stats.upcoming_games}</div><div className="stat-card-label">{t('dashboard.upcomingGamesStat')}</div></div>
-     <div className="stat-card glass-card"><div className="stat-card-icon">💰</div><div className="stat-card-value gold">{stats.total_revenue}</div><div className="stat-card-label">{t('dashboard.revenue')}</div></div>
-     <div className="stat-card glass-card"><div className="stat-card-icon">🏟️</div><div className="stat-card-value">{stats.venues_count}</div><div className="stat-card-label">{t('dashboard.venues')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="calendar" size={18} /></div><div className="stat-card-value">{stats.total_bookings}</div><div className="stat-card-label">{t('dashboard.totalBookings')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="grid" size={18} /></div><div className="stat-card-value">{stats.upcoming_games}</div><div className="stat-card-label">{t('dashboard.upcomingGamesStat')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="coins" size={18} /></div><div className="stat-card-value gold">{stats.total_revenue}</div><div className="stat-card-label">{t('dashboard.revenue')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="building" size={18} /></div><div className="stat-card-value">{stats.venues_count}</div><div className="stat-card-label">{t('dashboard.venues')}</div></div>
     </div>
 
     <div className="dashboard-card glass-card revenue-analytics-card">
@@ -140,7 +133,7 @@ export default function Home({ user, token, effectiveRole }) {
       <div className="booking-list">
        {stats.recent_bookings.slice(0, 5).map((b) => (
         <div key={b.event_id} className="booking-item">
-         <div className="booking-thumb">{sportIconMap[getSportIcon(b.sport_name)]}</div>
+         <div className="booking-thumb"><SportIcon name={b.sport_name} size={18} /></div>
          <div className="booking-info">
           <span className="booking-venue">{b.sport_name} @ {b.venue_name}</span>
           <span className="booking-date">{new Date(b.start_at).toLocaleDateString()}</span>
@@ -174,10 +167,10 @@ export default function Home({ user, token, effectiveRole }) {
      </div>
     </div>
     <div className="stats-grid">
-     <div className="stat-card glass-card"><div className="stat-card-icon">👥</div><div className="stat-card-value">{players.length + partners.length}</div><div className="stat-card-label">{t('dashboard.totalUsers')}</div></div>
-     <div className="stat-card glass-card"><div className="stat-card-icon">🎮</div><div className="stat-card-value">{events.length}</div><div className="stat-card-label">{t('dashboard.activeGames')}</div></div>
-     <div className="stat-card glass-card"><div className="stat-card-icon">🏟️</div><div className="stat-card-value">{venues.length}</div><div className="stat-card-label">{t('dashboard.venues')}</div></div>
-     <div className="stat-card glass-card"><div className="stat-card-icon">💰</div><div className="stat-card-value gold">{transactions.reduce((sum, tx) => sum + (tx.tx_type === 'grant' ? tx.amount : 0), 0)}</div><div className="stat-card-label">{t('dashboard.totalCredits')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="users" size={18} /></div><div className="stat-card-value">{players.length + partners.length}</div><div className="stat-card-label">{t('dashboard.totalUsers')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="grid" size={18} /></div><div className="stat-card-value">{events.length}</div><div className="stat-card-label">{t('dashboard.activeGames')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="building" size={18} /></div><div className="stat-card-value">{venues.length}</div><div className="stat-card-label">{t('dashboard.venues')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="coins" size={18} /></div><div className="stat-card-value gold">{transactions.reduce((sum, tx) => sum + (tx.tx_type === 'grant' ? tx.amount : 0), 0)}</div><div className="stat-card-label">{t('dashboard.totalCredits')}</div></div>
     </div>
     <div className="dashboard-grid">
      <div className="dashboard-card glass-card">
@@ -193,7 +186,7 @@ export default function Home({ user, token, effectiveRole }) {
  }
 
  return (
-  <div className="dashboard-page">
+  <div className={`dashboard-page ${isDemoToken(token) ? 'demo-dashboard' : ''}`}>
    <div className="page-header">
     <div className="page-header-copy">
      <h1>{t('dashboard.welcome', { name: getUserDisplayName(user, t('role.player')) })}</h1>
@@ -203,10 +196,10 @@ export default function Home({ user, token, effectiveRole }) {
    </div>
 
    <div className="stats-grid">
-    <div className="stat-card glass-card"><div className="stat-card-icon">🎮</div><div className="stat-card-value">{playerStats.games_played}</div><div className="stat-card-label">{t('dashboard.gamesJoined')}</div></div>
-    <div className="stat-card glass-card"><div className="stat-card-icon">💰</div><div className="stat-card-value gold">{playerStats.balance || balance}</div><div className="stat-card-label">{t('dashboard.credits')}</div></div>
-    <div className="stat-card glass-card"><div className="stat-card-icon">🏆</div><div className="stat-card-value">{events.length}</div><div className="stat-card-label">{t('dashboard.availableGames')}</div></div>
-    <div className="stat-card glass-card"><div className="stat-card-icon">⭐</div><div className="stat-card-value gold">{Number(playerStats.player_rating || 0).toFixed(1)}</div><div className="stat-card-label">{t('dashboard.rating')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="grid" size={18} /></div><div className="stat-card-value">{playerStats.games_played}</div><div className="stat-card-label">{t('dashboard.gamesJoined')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="coins" size={18} /></div><div className="stat-card-value gold">{playerStats.balance || balance}</div><div className="stat-card-label">{t('dashboard.credits')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="calendar" size={18} /></div><div className="stat-card-value">{events.length}</div><div className="stat-card-label">{t('dashboard.availableGames')}</div></div>
+    <div className="stat-card glass-card"><div className="stat-card-icon"><Icon name="star" size={18} /></div><div className="stat-card-value gold">{Number(playerStats.player_rating || 0).toFixed(1)}</div><div className="stat-card-label">{t('dashboard.rating')}</div></div>
    </div>
 
    <div className="dashboard-grid">
@@ -215,7 +208,7 @@ export default function Home({ user, token, effectiveRole }) {
      <div className="games-list">
       {events.map((event) => (
        <Link key={event.id} to={`/games/${event.id}`} className="game-list-item">
-        <div className="game-list-thumb">{sportIconMap[getSportIcon(event.sport_name)]}</div>
+        <div className="game-list-thumb"><SportIcon name={event.sport_name} size={18} /></div>
         <div className="game-list-info">
          <span className="game-list-title">{event.sport_name || ''} {event.title || t('common.game')}</span>
          <span className="game-list-venue">{event.venue_name || t('common.venue')} • {event.venue_city || ''}</span>

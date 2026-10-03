@@ -1,0 +1,144 @@
+/* Dark theme tokens and the few legacy light-only surfaces. */
+
+:root[data-theme='dark'] {
+ --bg: #0f172a;
+ --bg-dark: #0f172a;
+ --bg-light: #111c31;
+ --surface: #1e293b;
+ --surface-soft: #172235;
+ --surface-tint: #1b3852;
+ --panel: #1e293b;
+ --overlay: rgba(2, 6, 23, 0.72);
+ --brand: #5dade2;
+ --brand-strong: #79b9e8;
+ --brand-light: #8bc7f0;
+ --brand-2: #5dade2;
+ --accent: #5dade2;
+ --gold: #5dade2;
+ --brand-soft: #173b57;
+ --brand-soft-strong: #245b80;
+ --brand-ring: rgba(93, 173, 226, 0.28);
+ --text: #f8fafc;
+ --text-body: #b0bac9;
+ --text-muted: #64748b;
+ --text-soft: #8290a3;
+ --muted: #8290a3;
+ --line: #334155;
+ --line-strong: #475569;
+ --success: #4ade80;
+ --success-soft: #123b2b;
+ --danger: #f87171;
+ --danger-soft: #48202a;
+ --warning: #fbbf24;
+ --warning-soft: #493718;
+ --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.28);
+ --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.32);
+ --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+ --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.5);
+ --shadow-brand: 0 8px 22px rgba(52, 152, 219, 0.3);
+}
+
+:root[data-theme='dark'] body {
+ background: var(--bg);
+}
+
+:root[data-theme='dark'] .top-bar {
+ background: rgba(15, 23, 42, 0.88);
+}
+
+:root[data-theme='dark'] .page-content {
+ background: linear-gradient(180deg, #0f172a 0%, #111c31 100%);
+}
+
+:root[data-theme='dark'] .theme-toggle {
+ background: var(--surface);
+ color: var(--brand-light);
+ border-color: var(--line);
+}
+
+:root[data-theme='dark'] .theme-toggle:hover {
+ background: var(--brand-soft);
+ color: var(--text);
+ border-color: var(--brand-soft-strong);
+}
+
+:root[data-theme='dark'] .auth-page,
+:root[data-theme='dark'] .legal-page,
+:root[data-theme='dark'] .onboarding-page {
+ background: var(--bg);
+}
+
+:root[data-theme='dark'] .welcome-page-new,
+:root[data-theme='dark'] .section-how,
+:root[data-theme='dark'] .section-sports,
+:root[data-theme='dark'] .section-games,
+:root[data-theme='dark'] .section-map,
+:root[data-theme='dark'] .section-contact,
+:root[data-theme='dark'] .section-demo-entry,
+:root[data-theme='dark'] .footer-new {
+ background-color: var(--bg);
+ color: var(--text-body);
+}
+
+:root[data-theme='dark'] .welcome-nav,
+:root[data-theme='dark'] .announcement-banner,
+:root[data-theme='dark'] .sport-card,
+:root[data-theme='dark'] .game-card-new,
+:root[data-theme='dark'] .contact-card {
+ background: var(--surface);
+ border-color: var(--line);
+ box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme='dark'] .dc-slot-open {
+ background: #173b57;
+ color: var(--brand-light);
+}
+
+:root[data-theme='dark'] .dc-slot-booked,
+:root[data-theme='dark'] .dc-slot-blocked {
+ background: #111827;
+ color: var(--text-muted);
+}
+
+:root[data-theme='dark'] .dc-modal,
+:root[data-theme='dark'] .dc-stat-card {
+ background: var(--surface);
+ border-color: var(--line);
+ box-shadow: var(--shadow-lg);
+}
+
+:root[data-theme='dark'] .dc-status-btn,
+:root[data-theme='dark'] .dc-input {
+ background: var(--surface-soft);
+ border-color: var(--line-strong);
+ color: var(--text);
+}
+
+:root[data-theme='dark'] .admin-table tbody tr:hover {
+ background: var(--surface-soft);
+}
+
+:root[data-theme='dark'] .game-card-sport,
+:root[data-theme='dark'] .game-sport-badge {
+ background: rgba(30, 41, 59, 0.94);
+ color: var(--text);
+}
+
+:root[data-theme='dark'] .admin-danger-btn:hover:not(:disabled) {
+ background: var(--danger-soft);
+ color: #fecaca;
+}
+
+:root[data-theme='dark'] .chat-panel,
+:root[data-theme='dark'] .notif-dropdown {
+ background: var(--surface);
+ border-color: var(--line);
+ box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 767px) {
+ :root[data-theme='dark'] .top-bar {
+  background: rgba(15, 23, 42, 0.94);
+ }
+}

@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import logoSrc from '../assets/logo.png'
+import heroPhoto from '../assets/game-covers/football.JPG'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import Icon, { SportIcon } from '../components/Icon'
+import ThemeToggle from '../components/ThemeToggle'
 import { DEFAULT_SPORT_IMAGE, getSportImage } from '../utils/sportMedia'
 import '../styles/Welcome.css'
 
@@ -10,10 +13,10 @@ const MOCK_GAMES = [
  {
   id: '1',
   titleKey: 'welcome.weekendFootball',
-  sport: '⚽',
+  sport: 'football',
   sportName: 'football',
   venue: 'Spartak Stadium',
-  date: 'Sat, 2nd July',
+  date: '2026-10-05T18:00:00',
   players: '6/10',
   status: 'open',
   image: getSportImage('football'),
@@ -21,10 +24,10 @@ const MOCK_GAMES = [
  {
   id: '2',
   titleKey: 'welcome.basketballCup',
-  sport: '🏀',
+  sport: 'basketball',
   sportName: 'basketball',
   venue: 'Ala-Too Sports Palace',
-  date: 'Sun, 3rd July',
+  date: '2026-10-06T19:30:00',
   players: '8/10',
   status: 'open',
   image: getSportImage('basketball'),
@@ -32,10 +35,10 @@ const MOCK_GAMES = [
  {
   id: '3',
   titleKey: 'welcome.volleyballLeague',
-  sport: '🏐',
+  sport: 'volleyball',
   sportName: 'volleyball',
   venue: 'Manas Sports Hall',
-  date: 'Tue, 5th July',
+  date: '2026-10-08T18:30:00',
   players: '6/6',
   status: 'full',
   image: getSportImage('volleyball'),
@@ -44,45 +47,32 @@ const MOCK_GAMES = [
 
 export default function Welcome({ onStartDemo }) {
  const [isVisible, setIsVisible] = useState({})
- const { t } = useTranslation()
+ const { t, i18n } = useTranslation()
+ const formatGameDate = (value) => new Intl.DateTimeFormat(i18n.language === 'ru' ? 'ru-RU' : 'en-US', {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+  hour: '2-digit',
+  minute: '2-digit',
+ }).format(new Date(value))
  const demoEnabled = typeof onStartDemo === 'function'
- const localizedFloatingCards = [
-  {
-   title: t('welcome.weekendFootball'),
-   subtitle: t('welcome.floatingFootballMeta'),
-   icon: '⚽',
-   className: 'card-1',
-  },
-  {
-   title: t('welcome.basketballCup'),
-   subtitle: t('welcome.floatingBasketballMeta'),
-   icon: '🏀',
-   className: 'card-2',
-  },
-  {
-   title: t('welcome.volleyballLeague'),
-   subtitle: t('welcome.floatingVolleyballMeta'),
-   icon: '🏐',
-   className: 'card-3',
-  },
- ]
  const contactItems = [
   {
-   icon: '✆',
+  icon: 'chat',
    label: t('welcome.contactWhatsapp'),
    value: '+996 500 097 582',
    href: 'https://wa.me/996500097582',
    className: 'contact-whatsapp',
   },
   {
-   icon: '◎',
+  icon: 'instagram',
    label: t('welcome.contactInstagram'),
    value: '@teamup_kg',
    href: 'https://www.instagram.com/teamup_kg/',
    className: 'contact-instagram',
   },
   {
-   icon: '✉',
+  icon: 'mail',
    label: t('welcome.contactEmail'),
    value: 'teamup.fip14@gmail.com',
    href: 'https://mail.google.com/mail/view=cm&fs=1&to=teamup.fip14@gmail.com',
@@ -134,6 +124,7 @@ export default function Welcome({ onStartDemo }) {
      <a href="#sports">{t('welcome.sports')}</a>
     </div>
     <div className="nav-auth">
+      <ThemeToggle />
      <LanguageSwitcher className="welcome-language-switcher" />
      <Link to="/login" className="nav-login">{t('welcome.login')}</Link>
      <Link to="/register" className="nav-register">{t('welcome.register')}</Link>
@@ -143,53 +134,38 @@ export default function Welcome({ onStartDemo }) {
    {/* Hero Section */}
    <section className="hero-new">
     <div className="hero-content">
+      <span className="hero-kicker">{t('welcome.announcement')}</span>
      <h1 className="hero-title">
       {t('welcome.heroTitle1')}<br />
       <span className="gradient-text">{t('welcome.heroTitle2')}</span>
      </h1>
      <p className="hero-subtitle">{t('welcome.heroSubtitle')}</p>
-     <div className="hero-buttons-new">
-      <Link to="/register" className="btn-primary-new">{t('welcome.getStarted')}</Link>
-      <Link to="/login" className="btn-secondary-new">{t('welcome.login')}</Link>
-     </div>
+    <div className="hero-actions">
+     <Link to="/register" className="btn-primary-new">{t('welcome.getStarted')}</Link>
+     <Link to="/login" className="btn-secondary-new">{t('welcome.login')}</Link>
+    </div>
      
      {/* Stats Badges */}
-     <div className="hero-stats">
+    <div className="hero-stats hero-stats-strip">
       <div className="stat-badge">
-       <span className="stat-icon">👥</span>
+      <span className="stat-icon"><Icon name="users" size={18} /></span>
        <span className="stat-value">200+</span>
        <span className="stat-label">{t('welcome.players')}</span>
       </div>
       <div className="stat-badge">
-       <span className="stat-icon">🏟️</span>
+      <span className="stat-icon"><Icon name="building" size={18} /></span>
        <span className="stat-value">50+</span>
        <span className="stat-label">{t('welcome.venues')}</span>
       </div>
       <div className="stat-badge">
-       <span className="stat-icon">🤝🏼</span>
+      <span className="stat-icon"><Icon name="users" size={18} /></span>
        <span className="stat-value">5+</span>
        <span className="stat-label">{t('welcome.partners')}</span>
       </div>
      </div>
     </div>
-
-    <div className="hero-visual">
-     <div className="hero-image-container">
-      <img 
-       src="/land_page.jpg" 
-       alt="Sports action"
-       className="hero-image"
-      />
-      {localizedFloatingCards.map((card) => (
-       <div key={card.className} className={`floating-card ${card.className}`}>
-        <span className="fc-icon">{card.icon}</span>
-        <div className="fc-content">
-         <span className="fc-title">{card.title}</span>
-         <span className="fc-sub">{card.subtitle}</span>
-        </div>
-       </div>
-      ))}
-     </div>
+    <div className="hero-photo" aria-hidden="true">
+     <img src={heroPhoto} alt="" />
     </div>
    </section>
 
@@ -201,19 +177,19 @@ export default function Welcome({ onStartDemo }) {
     <div className="steps-container">
      <div className="step-card">
       <div className="step-number">01</div>
-      <div className="step-icon">📝</div>
+      <div className="step-icon"><Icon name="user" size={20} /></div>
       <h3>{t('welcome.step1Title')}</h3>
       <p>{t('welcome.step1Desc')}</p>
      </div>
      <div className="step-card">
       <div className="step-number">02</div>
-      <div className="step-icon">🔍</div>
+      <div className="step-icon"><Icon name="search" size={20} /></div>
       <h3>{t('welcome.step2Title')}</h3>
       <p>{t('welcome.step2Desc')}</p>
      </div>
      <div className="step-card">
       <div className="step-number">03</div>
-      <div className="step-icon">🏆</div>
+      <div className="step-icon"><Icon name="trophy" size={20} /></div>
       <h3>{t('welcome.step3Title')}</h3>
       <p>{t('welcome.step3Desc')}</p>
      </div>
@@ -245,17 +221,17 @@ export default function Welcome({ onStartDemo }) {
     
     <div className="sports-grid">
      <div className="sport-card sport-football">
-      <span className="sport-emoji">⚽</span>
+      <span className="sport-emoji"><SportIcon name="football" size={22} /></span>
       <h3>{t('welcome.football')}</h3>
       <p className="sport-count">{t('welcome.footballAction')}</p>
      </div>
      <div className="sport-card sport-basketball">
-      <span className="sport-emoji">🏀</span>
+      <span className="sport-emoji"><SportIcon name="basketball" size={22} /></span>
       <h3>{t('welcome.basketball')}</h3>
       <p className="sport-count">{t('welcome.basketballAction')}</p>
      </div>
      <div className="sport-card sport-volleyball">
-      <span className="sport-emoji">🏐</span>
+      <span className="sport-emoji"><SportIcon name="volleyball" size={22} /></span>
       <h3>{t('welcome.volleyball')}</h3>
       <p className="sport-count">{t('welcome.volleyballAction')}</p>
      </div>
@@ -269,7 +245,7 @@ export default function Welcome({ onStartDemo }) {
       <h2 className="section-title">{t('welcome.popularTitle')}</h2>
       <p className="section-subtitle">{t('welcome.popularSubtitle')}</p>
      </div>
-     <Link to="/register" className="view-all-btn">{t('welcome.viewAll')}</Link>
+    <Link to="/login" className="view-all-btn">{t('welcome.viewAll')}</Link>
     </div>
     
     <div className="games-grid">
@@ -286,40 +262,32 @@ export default function Welcome({ onStartDemo }) {
         <div className={`game-status-badge ${game.status}`}>
          ● {game.status === 'open' ? t('welcome.open') : t('welcome.full')}
         </div>
-        <div className="game-sport-badge">{game.sport}</div>
+         <div className="game-sport-badge"><SportIcon name={game.sportName} size={16} /></div>
        </div>
        <div className="game-info">
         <h3>{t(game.titleKey)}</h3>
         <div className="game-meta">
-         <span>📍 {game.venue}</span>
-         <span>📅 {game.date}</span>
-         <span>👥 {game.players}</span>
+         <span><Icon name="map-pin" size={14} /> {game.venue}</span>
+         <span><Icon name="calendar" size={14} /> {formatGameDate(game.date)}</span>
+         <span><Icon name="users" size={14} /> {game.players}</span>
         </div>
-        <Link to="/register" className="game-join-btn">{t('welcome.join')}</Link>
+        <Link to="/login" className="game-join-btn">{t('welcome.join')}</Link>
        </div>
       </div>
      ))}
     </div>
    </section>
 
-   {/* Demo Section */}
-   <section className="section-demo animate-on-scroll">
-    <h2 className="section-title">{t('welcome.joinAsPlayer')}</h2>
-    <p className="section-subtitle">{t('welcome.joinAsPlayerSubtitle')}</p>
-    
-    <div className="demo-cards">
-     <Link to="/register" className="demo-card">
-      <span className="demo-icon">👤</span>
-      <span className="demo-label">{t('welcome.player')}</span>
-      <span className="demo-desc">{t('welcome.playerDesc')}</span>
-     </Link>
-     <Link to="/login" className="demo-card">
-      <span className="demo-icon">🏟️</span>
-      <span className="demo-label">{t('welcome.partnerAccess')}</span>
-      <span className="demo-desc">{t('welcome.partnerAccessDesc')}</span>
-     </Link>
-    </div>
-   </section>
+  <section className="partner-callout animate-on-scroll">
+   <div className="partner-callout-icon"><Icon name="building" size={22} /></div>
+   <div className="partner-callout-copy">
+    <h2>{t('welcome.partnerCalloutTitle')}</h2>
+    <p>{t('welcome.partnerCalloutText')}</p>
+   </div>
+   <a className="partner-callout-action" href="https://wa.me/996500097582" target="_blank" rel="noreferrer">
+    <Icon name="chat" size={18} /> {t('welcome.partnerCalloutAction')}
+   </a>
+  </section>
 
    <section className="section-contact animate-on-scroll">
     <div className="contact-section-shell">
@@ -328,7 +296,7 @@ export default function Welcome({ onStartDemo }) {
       <h2 className="section-title">{t('welcome.contactTitle')}</h2>
       <p className="section-subtitle contact-subtitle">{t('welcome.contactSubtitle')}</p>
      </div>
-     <div className="contact-grid">
+    <div className="contact-grid">
       {contactItems.map((item) => (
        <a
         key={item.href}
@@ -337,7 +305,7 @@ export default function Welcome({ onStartDemo }) {
         target="_blank"
         rel="noreferrer"
        >
-        <span className="contact-card-icon" aria-hidden="true">{item.icon}</span>
+        <span className="contact-card-icon" aria-hidden="true"><Icon name={item.icon} size={18} /></span>
         <span className="contact-card-label">{item.label}</span>
         <span className="contact-card-value">{item.value}</span>
        </a>
@@ -355,7 +323,7 @@ export default function Welcome({ onStartDemo }) {
        <span>TeamUp</span>
       </div>
       <p>{t('welcome.footerDesc')}</p>
-      <div className="footer-sports">⚽🏀🏐</div>
+      <div className="footer-sports"><SportIcon name="football" size={18} /><SportIcon name="basketball" size={18} /><SportIcon name="volleyball" size={18} /></div>
      </div>
      
      <div className="footer-links">
@@ -363,8 +331,8 @@ export default function Welcome({ onStartDemo }) {
        <h4>{t('welcome.platform')}</h4>
        <a href="#games">{t('welcome.allGames')}</a>
        <a href="#sports">{t('welcome.venuesLink')}</a>
-       <a href="#games">{t('nav.leaderboard')}</a>
-       <a href="#how">{t('welcome.createGameLink')}</a>
+    <Link to="/leaderboard">{t('nav.leaderboard')}</Link>
+    <Link to="/login">{t('welcome.createGameLink')}</Link>
       </div>
       <div className="footer-column">
        <h4>{t('welcome.company')}</h4>

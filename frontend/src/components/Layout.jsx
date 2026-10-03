@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
@@ -6,9 +5,11 @@ import { getMyNotifications, markAllNotificationsRead } from '../api/users';
 import { rateEvent } from '../api/events';
 import logoSrc from '../assets/logo.png';
 import ChatAssistant from './ChatAssistant';
+import Icon from './Icon';
 import UserAvatar from './UserAvatar';
 import { isDemoToken } from '../demo/demoData';
 import { getUserDisplayName } from '../utils/userDisplay';
+import ThemeToggle from './ThemeToggle';
 
 const MONTHS = {
  Jan: 0,
@@ -36,7 +37,7 @@ function parseMonthDayTime(label, pattern) {
   return new Date(currentYear, month, Number(dayText), Number(hoursText), Number(minutesText))
  }
 
- const match = label.match(/^([A-Z][a-z]{2}) (\d{2}) at ? (\d{2}) : (\d{2})$/)
+ const match = label.match(/^([A-Z][a-z]{2}) (\d{2}) at (\d{2}):\s?(\d{2})$/)
  if (!match) return null
  const [, monthText, dayText, hoursText, minutesText] = match
  const month = MONTHS[monthText]
@@ -74,7 +75,7 @@ function formatNotification(notification, t, locale) {
     : null
 
    return {
-    icon: '',
+    icon: 'calendar',
     variant: 'booking',
     title: t('notif.gameCreatedTitle'),
     body: t('notif.gameCreatedBody', { player, sport, venue }),
@@ -94,7 +95,7 @@ function formatNotification(notification, t, locale) {
    const [, player, sport, venue, whenLabel] = match
    const when = parseMonthDayTime(whenLabel, 'booking-joined')
    return {
-    icon: '',
+    icon: 'users',
     variant: 'join',
     title: t('notif.joinedTitle'),
     body: t('notif.joinedBody', { player, sport, venue }),
@@ -111,7 +112,7 @@ function formatNotification(notification, t, locale) {
   if (match) {
    const [, user, amount] = match
    return {
-    icon: '',
+    icon: 'coins',
     variant: 'wallet',
     title: t('notif.creditRequestTitle'),
     body: t('notif.creditRequestBody', { user, amount }),
@@ -127,7 +128,7 @@ function formatNotification(notification, t, locale) {
   const ratingMatch = notification.message.match(/^Please rate how the game '(.+)' went from 1 to 5\.$/)
   const eventTitle = ratingMatch?.[1] || ''
   return {
-   icon: '',
+   icon: 'star',
    variant: 'rating',
    title: t('notif.rateGameTitle'),
    body: t('notif.rateGameBody', { title: eventTitle }),
@@ -146,7 +147,7 @@ function formatNotification(notification, t, locale) {
   const amount = refundMatch?.[1] || ''
   const eventTitle = refundMatch?.[2] || ''
   return {
-   icon: '',
+   icon: 'refund',
    variant: 'refund',
    title: t('notif.refundTitle'),
    body: t('notif.refundBody', { amount, title: eventTitle }),
@@ -160,7 +161,7 @@ function formatNotification(notification, t, locale) {
 
  if (notification.notification_type === 'event_starting_soon') {
   return {
-   icon: '',
+   icon: 'calendar',
    variant: 'booking',
    title: t('notif.gameSoonTitle'),
    body: notification.message,
@@ -173,7 +174,7 @@ function formatNotification(notification, t, locale) {
  }
 
  return {
-  icon: '',
+  icon: 'bell',
   variant: 'default',
   title: notification.title,
   body: notification.message,
@@ -186,26 +187,28 @@ function formatNotification(notification, t, locale) {
 }
 
 const PLAYER_NAV = [
- { path: '/dashboard', icon: '', labelKey: 'nav.home' },
- { path: '/games', icon: '', labelKey: 'nav.allGames' },
- { path: '/games/create', icon: '', labelKey: 'nav.createGame' },
- { path: '/leaderboard', icon: '', labelKey: 'nav.leaderboard' },
- { path: '/wallet', icon: '', labelKey: 'nav.wallet' },
- { path: '/profile', icon: '', labelKey: 'nav.profile' },
+ { path: '/dashboard', icon: 'home', labelKey: 'nav.home' },
+ { path: '/games', icon: 'grid', labelKey: 'nav.allGames' },
+ { path: '/games/create', icon: 'plus-circle', labelKey: 'nav.createGame' },
+ { path: '/leaderboard', icon: 'trophy', labelKey: 'nav.leaderboard' },
+ { path: '/wallet', icon: 'wallet', labelKey: 'nav.wallet' },
+ { path: '/profile', icon: 'user', labelKey: 'nav.profile' },
 ]
 
 const PARTNER_NAV = [
- { path: '/dashboard', icon: '', labelKey: 'nav.dashboard' },
- { path: '/partner/analytics', icon: '', labelKey: 'nav.analytics' },
- { path: '/partner/venues', icon: '', labelKey: 'nav.myVenues' },
- { path: '/partner/calendar', icon: '', labelKey: 'nav.calendar' },
+ { path: '/dashboard', icon: 'home', labelKey: 'nav.dashboard' },
+ { path: '/partner/analytics', icon: 'chart', labelKey: 'nav.analytics' },
+ { path: '/partner/venues', icon: 'building', labelKey: 'nav.myVenues' },
+ { path: '/partner/calendar', icon: 'calendar', labelKey: 'nav.calendar' },
+ { path: '/profile', icon: 'user', labelKey: 'nav.profile' },
 ]
 
 const ADMIN_NAV = [
- { path: '/dashboard', icon: '', labelKey: 'nav.dashboard' },
- { path: '/admin/users', icon: '', labelKey: 'nav.users' },
- { path: '/games', icon: '', labelKey: 'nav.games' },
- { path: '/admin', icon: '', labelKey: 'nav.walletControl' },
+ { path: '/dashboard', icon: 'home', labelKey: 'nav.dashboard' },
+ { path: '/admin/users', icon: 'users', labelKey: 'nav.users' },
+ { path: '/games', icon: 'grid', labelKey: 'nav.games' },
+ { path: '/admin', icon: 'wallet', labelKey: 'nav.walletControl' },
+ { path: '/profile', icon: 'user', labelKey: 'nav.profile' },
 ]
 
 export default function Layout({ children, user, token, onLogout, effectiveRole }) {
@@ -213,6 +216,7 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
  const [notifications, setNotifications] = useState([]);
  const [showNotifs, setShowNotifs] = useState(false);
  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+ const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
  const { t, i18n } = useTranslation();
  const isDemo = isDemoToken(token)
 
@@ -288,9 +292,12 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
   : effectiveRole === 'admin'
    ? ADMIN_NAV
    : PLAYER_NAV;
+ const mobileNavItems = effectiveRole === 'player'
+  ? [PLAYER_NAV[0], PLAYER_NAV[1], PLAYER_NAV[3], PLAYER_NAV[4], PLAYER_NAV[5]]
+  : navItems.slice(0, 5);
 
  return (
-  <div className="app-layout">
+  <div className={`app-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
    <div
     className={`mobile-nav-overlay ${mobileNavOpen ? 'is-visible' : ''}`}
     onClick={() => setMobileNavOpen(false)}
@@ -311,7 +318,9 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
        to={item.path}
        className={`sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
       >
-       <span className="sidebar-icon">{item.icon}</span>
+       <span className="sidebar-icon">
+        <Icon name={item.icon} size={20} />
+       </span>
        <span className="sidebar-label">{t(item.labelKey)}</span>
       </Link>
      ))}
@@ -323,12 +332,12 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
       <div className="sidebar-user-info">
        <span className="sidebar-user-name">{getUserDisplayName(user)}</span>
        <span className="sidebar-user-role">
-        {t(`role.${effectiveRole || user.role || 'player'}`)}{isDemo ? ' • Demo' : ''}
+        {t(`role.${effectiveRole || user.role || 'player'}`)}{isDemo ? ` • ${t('nav.demo')}` : ''}
        </span>
       </div>
      </div>
      <button className="sidebar-logout" onClick={onLogout}>
-      {t('nav.logout')}
+      {t(isDemo ? 'nav.exitDemo' : 'nav.logout')}
      </button>
     </div>
    </aside>
@@ -340,14 +349,12 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
      <div className="top-bar-left">
       <button
        type="button"
-       className="mobile-menu-btn"
-       onClick={() => setMobileNavOpen((current) => !current)}
-       aria-label={mobileNavOpen ? 'Close navigation' : 'Open navigation'}
-       aria-expanded={mobileNavOpen}
+       className="sidebar-menu-toggle"
+       onClick={() => setSidebarCollapsed((current) => !current)}
+       aria-label={sidebarCollapsed ? t('nav.openMenu') : t('nav.closeMenu')}
+       aria-expanded={!sidebarCollapsed}
       >
-       <span></span>
-       <span></span>
-       <span></span>
+       <Icon name="menu" size={22} />
       </button>
       <Link to="/dashboard" className="top-bar-brand" aria-label="TeamUp">
        <img src={logoSrc} alt="TeamUp" className="top-bar-brand-logo" />
@@ -356,6 +363,7 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
      </div>
      <div className="top-bar-right">
       <div className="top-bar-secondary">
+       <ThemeToggle />
        {!isDemo && (
         <ChatAssistant
          user={user}
@@ -367,7 +375,8 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
        {!isDemo && (
         <div className="top-bar-popover">
          <button type="button" className="notification-btn" onClick={() => setShowNotifs(!showNotifs)}>
-           {unread > 0 && <span className="notif-badge">{unread}</span>}
+          <Icon name="bell" size={20} />
+          {unread > 0 && <span className="notif-badge">{unread}</span>}
          </button>
          {showNotifs && (
           <div className="notif-dropdown glass-card">
@@ -386,7 +395,7 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
              onClick={() => setShowNotifs(false)}
              aria-label={t('chat.close')}
             >
-             &times;
+             <Icon name="close" size={16} />
             </button>
            </div>
            <div className="notif-list">
@@ -398,7 +407,9 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
               className={`notif-card notif-${view.variant} ${raw.is_read ? 'is-read' : 'is-unread'}`}
              >
               <div className="notif-card-top">
-               <div className="notif-icon">{view.icon}</div>
+               <div className="notif-icon">
+                <Icon name={view.icon} size={18} />
+               </div>
                <div className="notif-main">
                 <div className="notif-title-row">
                  <div className="notif-title">{view.title}</div>
@@ -444,6 +455,18 @@ export default function Layout({ children, user, token, onLogout, effectiveRole 
      {children}
     </div>
    </main>
+    <nav className="mobile-bottom-nav" aria-label={t('nav.navigation')}>
+    {mobileNavItems.map((item) => (
+      <Link
+       key={`mobile-${item.path}`}
+       to={item.path}
+       className={`mobile-bottom-nav-item ${location.pathname === item.path ? 'active' : ''}`}
+      >
+       <Icon name={item.icon} size={19} />
+       <span>{t(item.labelKey)}</span>
+      </Link>
+     ))}
+    </nav>
   </div>
  );
 }

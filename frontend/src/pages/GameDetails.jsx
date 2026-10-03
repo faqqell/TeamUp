@@ -202,9 +202,19 @@ export default function GameDetails({ token, user, effectiveRole }) {
   }
  }
 
- if (!event) return <div className="dashboard-page"><p className="empty-text">{t('gameDetails.loading')}</p></div>
+ if (!event) {
+  return (
+   <div className="dashboard-page">
+    <div className="glass-card game-details-error" role="alert">
+     <h2>{t('gameDetails.loadErrorTitle')}</h2>
+     <p>{error || t('gameDetails.loadError')}</p>
+     <button type="button" onClick={() => { setError(''); load() }}>{t('common.retry')}</button>
+    </div>
+   </div>
+  )
+ }
 
- const joinedParticipants = event.participants.filter(p => p.status === 'joined') || []
+ const joinedParticipants = (event.participants || []).filter(p => p.status === 'joined')
  const progressPct = (joinedParticipants.length / event.required_players) * 100
  const isFull = joinedParticipants.length >= event.required_players
  const tournamentRegistrations = event.tournament_registrations || []

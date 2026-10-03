@@ -154,7 +154,7 @@ export function getOnboardingSubmission(user) {
 
 export function hasCompletedOnboarding(user) {
  const submission = getOnboardingSubmission(user)
- return Boolean(user.onboarding_completed_at || submission.completedAt)
+ return Boolean(user.onboarding_completed_at || submission?.completedAt)
 }
 
 export function saveOnboardingSubmission(user, payload) {

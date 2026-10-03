@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { COOKIE_SESSION_TOKEN } from './api/http';
 import { logout as logoutRequest } from './api/auth';
 import { getMe, getStoredViewMode, setStoredViewMode } from './api/users';
@@ -26,6 +26,9 @@ import VenueCalendar from './pages/VenueCalendar';
 import VenueManage from './pages/VenueManage';
 import Wallet from './pages/Wallet';
 import Welcome from './pages/Welcome';
+import { DEMO_TOKEN, getDemoUser, isDemoToken, resetDemoSession } from './demo/demoData';
+import { ThemeProvider } from './context/ThemeContext';
+import './styles/DarkMode.css';
 
 export default function App() {
  const [token, setToken] = useState(null);
@@ -33,6 +36,7 @@ export default function App() {
  const [authResolved, setAuthResolved] = useState(false);
  const [authCheckVersion, setAuthCheckVersion] = useState(0);
  const [viewMode, setViewMode] = useState(getStoredViewMode());
+ const navigate = useNavigate();
 
  useEffect(() => {
   setAuthResolved(false);
@@ -60,17 +64,28 @@ export default function App() {
   setAuthCheckVersion((current) => current + 1);
  };
 
+ const onStartDemo = () => {
+  setToken(DEMO_TOKEN);
+  setUser(getDemoUser());
+  setAuthResolved(true);
+ };
+
  const onLogout = async () => {
-  try {
-   await logoutRequest();
-  } catch {
-   // Clear local auth state even if the cookie is already invalid server-side.
+  const wasDemo = isDemoToken(token);
+  if (!wasDemo) {
+   try {
+    await logoutRequest();
+   } catch {
+    // Clear local auth state even if the cookie is already invalid server-side.
+   }
   }
   setStoredViewMode('default');
   setToken(null);
   setUser(null);
+  resetDemoSession();
   setViewMode('default');
   setAuthResolved(true);
+  navigate(wasDemo ? '/' : '/login', { replace: true });
  };
 
  const onUserUpdate = (nextUser) => {
@@ -93,8 +108,9 @@ export default function App() {
  );
 
  return (
-  <Routes>
-   <Route path="/" element={!authResolved ? null : (token ? <Navigate to="/dashboard" replace /> : <Welcome />)} />
+  <ThemeProvider>
+   <Routes>
+  <Route path="/" element={!authResolved ? null : (token ? <Navigate to="/dashboard" replace /> : <Welcome onStartDemo={onStartDemo} />)} />
    <Route path="/login" element={!authResolved ? null : (token ? <Navigate to="/dashboard" replace /> : <Login onAuth={onAuth} />)} />
    <Route path="/register" element={!authResolved ? null : (token ? <Navigate to="/dashboard" replace /> : <Register onAuth={onAuth} />)} />
    <Route path="/legal/terms" element={<LegalDocument type="terms" />} />
@@ -212,7 +228,7 @@ export default function App() {
     element={
      <ProtectedRoute token={authResolved ? token : null} user={user} effectiveRole={effectiveRole}>
       <WithLayout title="Profile" subtitle="Your profile">
-       <Profile token={token} user={user} onUserUpdate={onUserUpdate} effectiveRole={effectiveRole} onViewModeChange={onViewModeChange} />
+      <Profile token={token} user={user} onUserUpdate={onUserUpdate} onLogout={onLogout} effectiveRole={effectiveRole} onViewModeChange={onViewModeChange} />
       </WithLayout>
      </ProtectedRoute>
     }
@@ -222,12 +238,13 @@ export default function App() {
     element={
      <ProtectedRoute token={authResolved ? token : null} user={user} effectiveRole={effectiveRole}>
       <WithLayout title="Leaderboard" subtitle="Top players">
-       <Leaderboard token={token} />
+      <Leaderboard token={token} user={user} />
       </WithLayout>
      </ProtectedRoute>
     }
    />
    <Route path="*" element={<Navigate to="/" replace />} />
-  </Routes>
+    </Routes>
+    </ThemeProvider>
  );
 }

@@ -1,490 +1,111 @@
-/* ====================================
-   GAMES PAGE
-   ==================================== */
+/* ==========================================================================
+   Games catalog
+   ========================================================================== */
+
 .games-page {
-  max-width: 1400px;
-  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
 }
 
 .games-toolbar {
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
 .search-bar {
   flex: 1;
-  min-width: 280px;
+  min-width: 240px;
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: 0 20px;
+  padding: 0 18px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.search-bar:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-ring);
 }
 
 .search-bar .search-icon {
-  color: #64748b;
-  font-size: 1.2rem;
+  display: inline-flex;
+  color: var(--text-muted);
 }
 
 .search-bar input {
   flex: 1;
-  background: transparent;
+  min-width: 0;
   border: none;
-  padding: 16px 0;
-  color: #fff;
-  font-size: 1rem;
+  background: transparent;
+  color: var(--text);
+  padding: 14px 0;
+  font-size: 0.95rem;
+  min-height: 0;
   outline: none;
 }
 
+.search-bar input:focus {
+  box-shadow: none;
+  border: none;
+}
+
 .search-bar input::placeholder {
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .filter-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
-  padding: 16px 24px;
-  border-radius: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.filter-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
-/* Sport Tabs */
-.sport-tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 28px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.sport-tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 50px;
-  color: #94a3b8;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.sport-tab:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
-.sport-tab.active {
-  background: linear-gradient(135deg, var(--brand) 0%, #ffd54f 100%);
-  color: #151e33;
-  border-color: var(--brand);
-}
-
-/* Games Grid */
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 24px;
-}
-
-.game-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.game-card-tournament {
-  border-color: rgba(250, 194, 22, 0.24);
-  box-shadow: 0 18px 40px rgba(250, 194, 22, 0.08);
-}
-
-.game-card-featured {
-  position: relative;
-}
-
-.game-card-featured::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(250, 194, 22, 0.18);
-  border-radius: 20px;
-  pointer-events: none;
-}
-
-.game-card:hover {
-  border-color: rgba(250, 194, 22, 0.3);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.game-card-image {
-  height: 180px;
-  position: relative;
-  overflow: hidden;
-}
-
-.game-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.game-card:hover .game-card-image img {
-  transform: scale(1.05);
-}
-
-.game-card-sport {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  padding: 8px 14px;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 0.85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text-body);
   font-weight: 600;
-}
-
-.game-card-status {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.game-card-status.open {
-  background: rgba(34, 197, 94, 0.9);
-  color: #fff;
-}
-
-.game-card-status.full {
-  background: rgba(239, 68, 68, 0.9);
-  color: #fff;
-}
-
-.game-card-status.closed {
-  background: rgba(239, 68, 68, 0.92);
-  color: #fff;
-}
-
-.game-card-status.cancelled {
-  background: rgba(148, 163, 184, 0.95);
-  color: #0f172a;
-}
-
-.game-card-type-badge {
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  padding: 8px 14px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(250, 194, 22, 0.95) 0%, rgba(255, 213, 79, 0.95) 100%);
-  color: #151e33;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.game-card-body {
-  padding: 20px;
-}
-
-.game-card-body h3 {
-  margin: 0 0 12px;
-  font-size: 1.2rem;
-  color: #fff;
-}
-
-.game-card-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.game-card-meta span {
-  color: #94a3b8;
   font-size: 0.9rem;
+  cursor: pointer;
 }
 
-.game-card-subtitle {
-  line-height: 1.4;
+.filter-btn:hover {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-strong);
+  color: var(--brand-strong);
 }
 
-.game-card-progress {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 16px;
+@media (max-width: 767px) {
+  .games-page { gap: 12px; }
+  .games-toolbar { gap: 8px; position: sticky; top: 0; z-index: 5; padding-block: 2px 4px; background: var(--bg); }
+  .search-bar { min-width: 0; min-height: 44px; padding-inline: 12px; }
+  .search-bar input { font-size: 16px; padding-block: 10px; }
+  .filter-btn { min-height: 44px; padding-inline: 12px; }
+  .sport-tabs { margin-inline: -16px; padding-inline: 16px; scroll-snap-type: x proximity; }
+  .sport-tab { min-height: 40px; padding: 8px 12px; scroll-snap-align: start; font-size: 0.8rem; }
+  .games-grid { grid-template-columns: 1fr; gap: 12px; }
+  .game-card { border-radius: var(--radius-md); }
+  .game-card-image { height: 132px; }
+  .game-card-sport, .game-card-status { top: 8px; padding: 6px 9px; font-size: 0.7rem; }
+  .game-card-type-badge { left: 8px; bottom: 8px; padding: 6px 9px; }
+  .game-card-body { gap: 10px; padding: 12px; }
+  .game-card-top { gap: 6px; }
+  .game-card-title-block h3 { font-size: 1rem; }
 }
 
-.game-card-progress .progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--brand) 0%, #22c55e 100%);
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-
-.game-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.game-credits {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--brand);
-}
-
-/* ====================================
-   GAMES RESPONSIVE OVERRIDES
-   ==================================== */
-.games-page,
-.games-toolbar,
-.games-grid,
-.game-card,
-.game-card-footer {
-  min-width: 0;
-}
-
-@media (max-width: 479px) {
-  .games-toolbar {
-    gap: 12px;
-  }
-
-  .search-bar,
-  .filter-btn {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .search-bar {
-    padding-inline: 14px;
-  }
-
-  .games-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .game-card-body {
-    padding: 16px;
-  }
-
-  .game-card-footer {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-}
-
-@media (min-width: 480px) and (max-width: 767px) {
-  .games-page {
-    max-width: 700px;
-  }
-
-  .games-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .games-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1199px) {
-  .games-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-  }
-}
-
-.join-btn {
-  padding: 12px 28px;
-  background: linear-gradient(135deg, var(--brand) 0%, #ffd54f 100%);
-  color: #151e33;
-  border-radius: 12px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.join-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(250, 194, 22, 0.3);
-}
-
-.join-btn.disabled {
-  background: #4b5563;
-  color: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 80px 20px;
-}
-
-.empty-state .empty-icon {
-  font-size: 4rem;
-  margin-bottom: 20px;
-  display: block;
-}
-
-.empty-state h3 {
-  margin: 0 0 8px;
-  font-size: 1.5rem;
-  color: #fff;
-}
-
-.empty-state p {
-  color: #64748b;
-  margin: 0 0 24px;
-}
-
-.empty-state .glass-btn {
-  min-height: 44px;
-  box-shadow: 0 6px 16px rgba(250, 194, 22, 0.12);
-}
-
-.empty-state .glass-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(250, 194, 22, 0.14);
-}
-
-/* ====================================
-   RESPONSIVE ADJUSTMENTS
-   ==================================== */
-@media (max-width: 900px) {
-  .games-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 680px) {
-  .games-page .page-header {
-    margin-bottom: 22px;
-  }
-
-  .games-page .page-header .btn-primary {
-    align-self: flex-start;
-    margin-top: 4px;
-  }
-
-  .search-bar {
-    min-width: 0;
-    width: 100%;
-    padding: 0 16px;
-  }
-
-  .sport-tabs {
-    margin-bottom: 20px;
-  }
-
-  .game-card-body {
-    padding: 16px;
-  }
-
-  .game-card-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .join-btn {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-@media (max-width: 560px) {
-  .games-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .game-card-image {
-    height: 160px;
-  }
-
-  .game-card-sport,
-  .game-card-status {
-    font-size: 0.75rem;
-    padding: 7px 10px;
-  }
-
-  .empty-state {
-    padding: 52px 18px;
-  }
-
-  .empty-state .glass-btn {
-    width: auto;
-    min-width: 168px;
-  }
-}
-
-/* ====================================
-   MOBILE-FIRST OVERRIDES
-   ==================================== */
-.games-page {
-  max-width: var(--content-max-wide);
-  padding-inline: 0;
-}
-
-.games-page .page-header {
-  margin-bottom: 18px;
-}
-
-.games-toolbar {
-  margin-bottom: 16px;
-}
-
-.search-bar {
-  min-width: 0;
-  border-radius: var(--radius-md);
-  padding: 0 14px;
-}
-
-.search-bar input {
-  padding: 13px 0;
-  font-size: 0.95rem;
-}
+/* --------------------------------------------------------------------------
+   Sport filter pills
+   -------------------------------------------------------------------------- */
 
 .sport-tabs {
-  gap: 8px;
-  margin-bottom: 20px;
-  padding-bottom: 6px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
   scrollbar-width: none;
 }
 
@@ -493,92 +114,200 @@
 }
 
 .sport-tab {
-  min-height: 44px;
-  padding: 10px 14px;
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   flex: 0 0 auto;
+  min-height: 42px;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  background: var(--surface-soft);
+  color: var(--text-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 
+.sport-tab:hover:not(:disabled) {
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+}
+
+.sport-tab.active {
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Cards grid
+   -------------------------------------------------------------------------- */
+
 .games-grid {
-  grid-template-columns: 1fr;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  min-width: 0;
 }
 
 .game-card {
-  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .game-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand-soft-strong);
+}
+
+.game-card-tournament {
+  border-color: var(--brand-soft-strong);
+}
+
+.game-card-featured {
+  box-shadow: 0 10px 26px rgba(52, 152, 219, 0.1);
 }
 
 .game-card-image {
-  height: 152px;
+  position: relative;
+  height: 176px;
+  overflow: hidden;
+  background: var(--surface-soft);
 }
 
-.game-card-sport,
-.game-card-status {
-  top: 12px;
-  font-size: 0.74rem;
-  padding: 6px 10px;
+.game-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.game-card:hover .game-card-image img {
+  transform: scale(1.04);
 }
 
 .game-card-sport {
+  position: absolute;
+  top: 12px;
   left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .game-card-status {
+  position: absolute;
+  top: 12px;
   right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+
+.game-card-status.open {
+  background: rgba(46, 204, 113, 0.94);
+}
+
+.game-card-status.full {
+  background: rgba(231, 76, 60, 0.94);
+}
+
+.game-card-status.closed,
+.game-card-status.cancelled {
+  background: rgba(120, 132, 148, 0.94);
+}
+
+.game-card-type-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .game-card-body {
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  flex: 1;
 }
 
 .game-card-top {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 12px;
+}
+
+.game-card-title-block {
+  min-width: 0;
 }
 
 .game-card-title-block h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.3;
+  color: var(--text);
 }
 
 .game-card-subtitle {
   margin: 4px 0 0;
-  color: #94a3b8;
   font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.4;
 }
 
 .game-card-meta {
-  gap: 10px;
-  margin-bottom: 14px;
+  display: grid;
+  gap: 8px;
+  flex: 1;
 }
 
 .game-card-detail {
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  font-size: 0.85rem;
   line-height: 1.45;
-  font-size: 0.86rem;
+  color: var(--text-body);
+}
+
+.game-card-detail > .icon {
+  margin-top: 2px;
+  color: var(--text-muted);
 }
 
 .game-card-capacity {
-  color: #cbd5e1;
-}
-
-.game-card-progress {
-  margin-bottom: 14px;
-}
-
-.game-card-footer {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
+  color: var(--text-body);
 }
 
 .game-credits {
@@ -586,57 +315,58 @@
   align-items: center;
   width: fit-content;
   max-width: 100%;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: rgba(250, 194, 22, 0.1);
-  border: 1px solid rgba(250, 194, 22, 0.2);
-  font-size: 0.92rem;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.game-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
 }
 
 .join-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  min-height: 44px;
-  padding: 11px 16px;
-  text-align: center;
+  min-height: 46px;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-brand);
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 
-.empty-state {
-  padding: 48px 16px;
+.join-btn:hover {
+  background: var(--brand-strong);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(52, 152, 219, 0.3);
 }
 
-.empty-state .empty-icon {
-  font-size: 2.8rem;
-  margin-bottom: 16px;
+.join-btn.disabled {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
 }
 
-@media (min-width: 600px) {
-  .games-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
 
-@media (min-width: 960px) {
-  .games-page {
-    max-width: 1200px;
-  }
-
-  .games-toolbar {
-    margin-bottom: 20px;
-  }
-
-  .games-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-  }
-
-  .game-card-image {
-    height: 170px;
-  }
-
-  .game-card-body {
-    padding: 18px;
-  }
-
+@media (min-width: 900px) {
   .game-card-top {
     flex-direction: row;
     align-items: flex-start;
@@ -644,17 +374,52 @@
   }
 
   .game-card-title-block {
-    min-width: 0;
     flex: 1;
   }
 
   .game-card-footer {
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .join-btn {
     width: auto;
+    min-width: 168px;
+  }
+}
+
+@media (max-width: 640px) {
+  .games-page {
+    gap: 16px;
+  }
+
+  .games-toolbar {
+    gap: 10px;
+  }
+
+  .search-bar {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .games-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .game-card-image {
+    height: 156px;
+  }
+
+  .game-card-body {
+    padding: 16px;
+  }
+
+  .game-card-footer {
+    justify-content: stretch;
   }
 }

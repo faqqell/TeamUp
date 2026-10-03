@@ -113,7 +113,8 @@ export default function CreateGame({ token }) {
 
  const availableSports = useMemo(() => {
   if (!selectedVenue) return sports
-  return sports.filter((sport) => selectedVenue.sport_ids.includes(sport.id))
+  const venueSportIds = Array.isArray(selectedVenue.sport_ids) ? selectedVenue.sport_ids : []
+  return sports.filter((sport) => venueSportIds.includes(sport.id))
  }, [sports, selectedVenue])
 
  const allowedRequiredPlayers = useMemo(() => {
@@ -258,6 +259,9 @@ export default function CreateGame({ token }) {
       teams_count: Number(form.teams_count),
       duration_hours: Number(form.duration_hours),
       auto_join_creator: true,
+      sport_name: selectedSport?.name,
+      venue_name: selectedVenue?.name,
+      venue_city: selectedVenue?.city,
      }))
     : await createEvent(token, {
       sport_id: form.sport_id,

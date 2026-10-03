@@ -25,7 +25,7 @@ function getSafeOnboardingError(language) {
 }
 
 function buildInitialForm(user) {
- const existingAnswers = getOnboardingSubmission(user).answers || {}
+ const existingAnswers = getOnboardingSubmission(user)?.answers || {}
  return ALL_ONBOARDING_QUESTIONS.reduce((acc, question) => {
   acc[question.id] = getQuestionInitialValue(question, existingAnswers)
   return acc
@@ -38,7 +38,7 @@ export default function Onboarding({ user, token }) {
  const [form, setForm] = useState(() => buildInitialForm(user))
  const [error, setError] = useState('')
  const [submitting, setSubmitting] = useState(false)
- const [result, setResult] = useState(() => getOnboardingSubmission(user).evaluation || null)
+ const [result, setResult] = useState(() => getOnboardingSubmission(user)?.evaluation || null)
 
  const visibleQuestions = useMemo(() => getVisibleOnboardingQuestions(form), [form])
  const isComplete = useMemo(

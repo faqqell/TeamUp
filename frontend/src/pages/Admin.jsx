@@ -23,6 +23,7 @@ import { getUserDisplayName } from '../utils/userDisplay'
 
 export default function Admin({ token, user }) {
  const location = useLocation()
+ const isWalletControl = location.pathname === '/admin'
  const getInitialTab = () => (location.pathname === '/admin' ? 'wallet' : 'players')
  const [tab, setTab] = useState(getInitialTab)
  const [players, setPlayers] = useState([])
@@ -251,7 +252,7 @@ export default function Admin({ token, user }) {
   })
  }
 
- const adminTabs = ['wallet', 'players', 'partners', 'games', 'tournaments', 'venues']
+ const adminTabs = ['players', 'partners', 'games', 'tournaments', 'venues']
 
  // Email autocomplete filtering
  const allUsers = [...players, ...partners]
@@ -411,36 +412,39 @@ export default function Admin({ token, user }) {
 
  return (
   <div className="dashboard-page admin-page">
-   {/* Stats Grid */}
-   <div className="stats-grid admin-stats-grid">
-    <div className="stat-card glass-card"><div className="stat-card-icon">👥</div><div className="stat-card-value">{players.length}</div><div className="stat-card-label">{t('admin.totalPlayers')}</div></div>
-    <div className="stat-card glass-card"><div className="stat-card-icon">🏢</div><div className="stat-card-value">{partners.length}</div><div className="stat-card-label">{t('admin.partnersLabel')}</div></div>
-    <div className="stat-card glass-card"><div className="stat-card-icon">🏟️</div><div className="stat-card-value">{venues.length}</div><div className="stat-card-label">{t('admin.venuesLabel')}</div></div>
-    <div className="stat-card glass-card"><div className="stat-card-icon">🎮</div><div className="stat-card-value">{events.length + tournaments.length}</div><div className="stat-card-label">{t('admin.gamesLabel')}</div></div>
-   </div>
-   <div className="glass-card admin-summary-strip" aria-label={t('admin.walletControl')}>
-    <span>{players.length} {t('admin.totalPlayers').toLowerCase()}</span>
-    <span className="admin-summary-separator" aria-hidden="true">•</span>
-    <span>{partners.length} {t('admin.partnersLabel').toLowerCase()}</span>
-    <span className="admin-summary-separator" aria-hidden="true">•</span>
-    <span>{venues.length} {t('admin.venuesLabel').toLowerCase()}</span>
-    <span className="admin-summary-separator" aria-hidden="true">•</span>
-    <span>{events.length + tournaments.length} {t('admin.gamesLabel').toLowerCase()}</span>
-   </div>
+   {!isWalletControl && (
+    <>
+     {/* Stats Grid */}
+     <div className="stats-grid admin-stats-grid">
+      <div className="stat-card glass-card"><div className="stat-card-icon">👥</div><div className="stat-card-value">{players.length}</div><div className="stat-card-label">{t('admin.totalPlayers')}</div></div>
+      <div className="stat-card glass-card"><div className="stat-card-icon">🏢</div><div className="stat-card-value">{partners.length}</div><div className="stat-card-label">{t('admin.partnersLabel')}</div></div>
+      <div className="stat-card glass-card"><div className="stat-card-icon">🏟️</div><div className="stat-card-value">{venues.length}</div><div className="stat-card-label">{t('admin.venuesLabel')}</div></div>
+      <div className="stat-card glass-card"><div className="stat-card-icon">🎮</div><div className="stat-card-value">{events.length + tournaments.length}</div><div className="stat-card-label">{t('admin.gamesLabel')}</div></div>
+     </div>
+     <div className="glass-card admin-summary-strip" aria-label={t('admin.walletControl')}>
+      <span>{players.length} {t('admin.totalPlayers').toLowerCase()}</span>
+      <span className="admin-summary-separator" aria-hidden="true">•</span>
+      <span>{partners.length} {t('admin.partnersLabel').toLowerCase()}</span>
+      <span className="admin-summary-separator" aria-hidden="true">•</span>
+      <span>{venues.length} {t('admin.venuesLabel').toLowerCase()}</span>
+      <span className="admin-summary-separator" aria-hidden="true">•</span>
+      <span>{events.length + tournaments.length} {t('admin.gamesLabel').toLowerCase()}</span>
+     </div>
 
-   {/* Tabs */}
-   <div className="admin-tabs">
-    {adminTabs.map(tabKey => (
-     <button key={tabKey} className={`admin-tab ${tab === tabKey ? 'active' : ''}`} onClick={() => setTab(tabKey)}>
-      {tabKey === 'wallet' && t('admin.walletTab')}
-      {tabKey === 'players' && t('admin.playersTab')}
-      {tabKey === 'partners' && t('admin.partnersTab')}
-      {tabKey === 'games' && t('admin.gamesTab')}
-      {tabKey === 'tournaments' && t('admin.tournamentsTab')}
-      {tabKey === 'venues' && t('admin.venuesTab')}
-     </button>
-    ))}
-   </div>
+     {/* Tabs */}
+     <div className="admin-tabs">
+      {adminTabs.map(tabKey => (
+       <button key={tabKey} className={`admin-tab ${tab === tabKey ? 'active' : ''}`} onClick={() => setTab(tabKey)}>
+        {tabKey === 'players' && t('admin.playersTab')}
+        {tabKey === 'partners' && t('admin.partnersTab')}
+        {tabKey === 'games' && t('admin.gamesTab')}
+        {tabKey === 'tournaments' && t('admin.tournamentsTab')}
+        {tabKey === 'venues' && t('admin.venuesTab')}
+       </button>
+      ))}
+     </div>
+    </>
+   )}
 
    {error && <div className="alert alert-error">{error}</div>}
    {success && <div className="alert alert-success">{success}</div>}

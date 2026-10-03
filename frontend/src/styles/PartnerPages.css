@@ -1,52 +1,75 @@
+/* ==========================================================================
+   Partner pages — venues, analytics, calendar
+   ========================================================================== */
+
 .partner-page-shell {
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
   display: grid;
-  gap: 16px;
+  gap: 20px;
 }
 
 .partner-page-header h1 {
   margin: 0;
   font-size: 1.5rem;
-  line-height: 1.2;
 }
 
 .partner-page-subtitle {
   margin: 6px 0 0;
-  color: #94a3b8;
-  font-size: 0.92rem;
-  line-height: 1.45;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
 }
 
 .partner-section-card {
-  padding: 16px;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 22px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
   min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .partner-page-shell {
+    max-width: var(--dashboard-container-max);
+    gap: 24px;
+  }
+
+  .partner-section-card {
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+  }
+
+  .partner-section-card:hover {
+    box-shadow: var(--shadow-md);
+  }
 }
 
 .partner-section-heading {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  align-items: flex-start;
   flex-wrap: wrap;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .partner-section-heading h2 {
   margin: 0;
-  font-size: 1rem;
-  color: #fff;
+  font-size: 1.02rem;
 }
 
 .partner-section-heading p {
   margin: 0;
-  color: #94a3b8;
   font-size: 0.84rem;
+  color: var(--text-muted);
 }
+
+/* --------------------------------------------------------------------------
+   Forms
+   -------------------------------------------------------------------------- */
 
 .partner-form-grid {
   display: grid;
@@ -55,28 +78,26 @@
 
 .partner-form-group {
   display: grid;
-  gap: 8px;
+  gap: 6px;
+  min-width: 0;
 }
 
 .partner-form-group label {
-  color: #cbd5e1;
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-body);
 }
 
 .partner-form-group input,
 .partner-calendar-select {
   width: 100%;
   min-width: 0;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
-}
-
-.partner-form-group input::placeholder {
-  color: #64748b;
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  min-height: 44px;
 }
 
 .partner-sport-pills {
@@ -87,17 +108,28 @@
 
 .partner-sport-pill {
   min-height: 40px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #cbd5e1;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.partner-sport-pill:hover {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-strong);
+  color: var(--brand-strong);
 }
 
 .partner-sport-pill.active {
-  border-color: rgba(250, 194, 22, 0.45);
-  background: rgba(250, 194, 22, 0.12);
-  color: #fff4c2;
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
 }
 
 .partner-form-actions {
@@ -106,35 +138,39 @@
   gap: 10px;
 }
 
+/* --------------------------------------------------------------------------
+   Venue list
+   -------------------------------------------------------------------------- */
+
 .partner-venue-list {
   display: grid;
   gap: 12px;
 }
 
 .partner-venue-card {
-  padding: 14px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
 }
 
 .partner-venue-card-head {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .partner-venue-card-head h3 {
   margin: 0;
   font-size: 1rem;
-  color: #fff;
 }
 
 .partner-venue-location {
   margin: 4px 0 0;
-  color: #94a3b8;
+  font-size: 0.85rem;
+  color: var(--text-muted);
   line-height: 1.45;
 }
 
@@ -142,26 +178,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(250, 194, 22, 0.12);
-  border: 1px solid rgba(250, 194, 22, 0.22);
-  color: #fde68a;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  color: var(--brand-strong);
   font-size: 0.82rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .partner-venue-meta {
   display: grid;
   gap: 6px;
   margin-top: 12px;
-  color: #cbd5e1;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
+  color: var(--text-body);
 }
 
 .partner-venue-edit-btn {
   width: 100%;
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .partner-calendar-toolbar {
@@ -177,59 +213,66 @@
   overflow: hidden;
 }
 
+/* --------------------------------------------------------------------------
+   Analytics
+   -------------------------------------------------------------------------- */
+
 .partner-analytics-grid {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .partner-analytics-stat {
   display: grid;
-  gap: 8px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  gap: 6px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
 }
 
 .partner-analytics-stat-highlight {
-  background: linear-gradient(180deg, rgba(250, 194, 22, 0.14), rgba(250, 194, 22, 0.05));
-  border-color: rgba(250, 194, 22, 0.24);
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-strong);
 }
 
 .partner-analytics-label {
-  color: #94a3b8;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
+  color: var(--text-muted);
 }
 
 .partner-analytics-value {
-  color: #fff2b2;
-  font-size: 1.8rem;
-  line-height: 1.1;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--brand-strong);
+  overflow-wrap: anywhere;
 }
 
 .partner-analytics-summary {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .partner-analytics-summary-item {
   display: grid;
-  gap: 6px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  gap: 4px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
 }
 
 .partner-analytics-summary-number {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
+  letter-spacing: -0.02em;
 }
 
 .partner-analytics-summary-text {
-  color: #94a3b8;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .partner-analytics-bookings {
@@ -239,38 +282,49 @@
 
 .partner-analytics-booking {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: 14px;
+  justify-content: space-between;
+  gap: 16px;
   padding: 14px 16px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
 }
 
 .partner-analytics-booking-title {
-  color: #fff;
   font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
 }
 
 .partner-analytics-booking-meta {
   margin-top: 4px;
-  color: #94a3b8;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
+  color: var(--text-muted);
 }
 
 .partner-analytics-booking-side {
   display: grid;
   gap: 4px;
   justify-items: end;
-  color: #cbd5e1;
-  font-size: 0.84rem;
   text-align: right;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
+
+.partner-analytics-booking-side strong {
+  font-size: 0.92rem;
+  color: var(--brand-strong);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
 
 @media (min-width: 760px) {
   .partner-page-header h1 {
-    font-size: 1.9rem;
+    font-size: 1.75rem;
   }
 
   .partner-form-grid {
@@ -312,21 +366,10 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 640px) {
   .partner-section-card {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 479px) {
-  .partner-page-shell {
-    gap: 12px;
-  }
-
-  .partner-venue-list,
-  .partner-analytics-grid,
-  .partner-analytics-summary {
-    grid-template-columns: 1fr;
+    padding: 16px;
+    border-radius: var(--radius-lg);
   }
 
   .partner-analytics-booking {
@@ -336,29 +379,5 @@
   .partner-analytics-booking-side {
     justify-items: start;
     text-align: left;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .partner-venue-list {
-    grid-template-columns: 1fr;
-  }
-
-  .partner-analytics-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .partner-analytics-summary {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1199px) {
-  .partner-page-shell {
-    max-width: 1040px;
-  }
-
-  .partner-analytics-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

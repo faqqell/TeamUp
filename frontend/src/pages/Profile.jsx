@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +11,7 @@ import { getOnboardingSubmission } from '../utils/onboarding'
 import { getDemoPlayerStats, getDemoProfileGames, getDemoSports, isDemoToken, updateDemoProfile } from '../demo/demoData'
 import { getUserDisplayName } from '../utils/userDisplay'
 
-export default function Profile({ user, token, onUserUpdate, effectiveRole, onViewModeChange }) {
+export default function Profile({ user, token, onUserUpdate, onLogout, effectiveRole, onViewModeChange }) {
  const [stats, setStats] = useState({ games_played: 0, balance: 0, player_rating: 0, onboarding_score: null })
  const [games, setGames] = useState({ created_games: [], completed_games: [], cancelled_games: [] })
  const [gamesTab, setGamesTab] = useState('created')
@@ -24,9 +24,13 @@ export default function Profile({ user, token, onUserUpdate, effectiveRole, onVi
  })
  const [success, setSuccess] = useState('')
  const [error, setError] = useState('')
- const [onboardingResult, setOnboardingResult] = useState(() => getOnboardingSubmission(user).evaluation || null)
+ const [onboardingResult, setOnboardingResult] = useState(() => getOnboardingSubmission(user)?.evaluation || null)
  const { t, i18n } = useTranslation()
  const navigate = useNavigate()
+
+ const reportLoadError = useCallback((err) => {
+  setError(err?.message || t('profile.loadError'))
+ }, [t])
 
  useEffect(() => {
   if (isDemoToken(token)) {
@@ -36,11 +40,11 @@ export default function Profile({ user, token, onUserUpdate, effectiveRole, onVi
    return
   }
   if (token) {
-   getMyStats(token).then(setStats).catch(() => {})
-   getMyGames(token).then(setGames).catch(() => {})
-   getSports().then(setSports).catch(() => {})
+   getMyStats(token).then(setStats).catch(reportLoadError)
+   getMyGames(token).then(setGames).catch(reportLoadError)
+   getSports().then(setSports).catch(reportLoadError)
   }
- }, [token])
+ }, [token, reportLoadError])
 
  useEffect(() => {
   if (user) {
@@ -49,7 +53,7 @@ export default function Profile({ user, token, onUserUpdate, effectiveRole, onVi
     bio: user.bio || '',
     favorite_sports: user.favorite_sports || '',
    })
-   setOnboardingResult(getOnboardingSubmission(user).evaluation || null)
+  setOnboardingResult(getOnboardingSubmission(user)?.evaluation || null)
   }
  }, [user])
 
@@ -365,7 +369,10 @@ export default function Profile({ user, token, onUserUpdate, effectiveRole, onVi
      </div>
     )}
    </div>
+
+  <button type="button" className="profile-mobile-logout" onClick={onLogout}>
+   {t(isDemoToken(token) ? 'nav.exitDemo' : 'nav.logout')}
+  </button>
   </div>
  )
 }
-
