@@ -4,10 +4,6 @@ export function getVenues() {
  return http('/venues')
 }
 
-export function getVenue(id) {
- return http(`/venues/${id}`)
-}
-
 export function createVenue(token, data) {
  return http('/partner/venues', { method: 'POST', body: data, token })
 }
