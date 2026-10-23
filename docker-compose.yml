@@ -18,6 +18,20 @@ services:
       retries: 5
       start_period: 10s
 
+  mailpit:
+    image: axllent/mailpit:v1.21
+    container_name: teamup_local_mailpit
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8025/api/v1/info"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
   backend:
     build:
       context: ./backend
@@ -27,24 +41,26 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      mailpit:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql+psycopg://teamup:teamup@db:5432/teamup
       JWT_SECRET: dev_secret_change_later_please_change
       JWT_ALG: HS256
       ACCESS_TOKEN_EXPIRE_MIN: 10080
-      PRIMARY_ADMIN_EMAIL: admin@teamup.kg
+      PRIMARY_ADMIN_EMAIL: admin@teamup.com
       CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080
       AUTH_COOKIE_SECURE: "false"
       AUTH_COOKIE_SAMESITE: lax
       APP_BASE_URL: http://localhost:5173
       OPENAI_API_KEY: ""
       OPENAI_MODEL: gpt-5-nano
-      SMTP_HOST: ""
-      SMTP_PORT: "587"
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
       SMTP_USER: ""
       SMTP_PASSWORD: ""
-      SMTP_FROM_EMAIL: ""
-      SMTP_USE_TLS: "true"
+      SMTP_FROM_EMAIL: no-reply@teamup.local
+      SMTP_USE_TLS: "false"
       SMTP_USE_SSL: "false"
       VERIFICATION_CODE_TTL_MIN: "10"
       VERIFICATION_RESEND_SEC: "60"

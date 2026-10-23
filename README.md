@@ -43,6 +43,10 @@ Requirements:
 - `Node.js 20+`
 - `docker compose`
 
+This repository is configured for local development only. To run the backend
+directly on the host instead of Docker, copy `backend/.env.example` to
+`backend/.env` and adjust values as needed.
+
 ### Mac / Linux
 
 ```bash
@@ -60,6 +64,11 @@ After startup:
 - Frontend: `http://localhost:5173`
 - Backend API: `http://localhost:8000`
 - Swagger: `http://localhost:8000/docs`
+- Verification email inbox: `http://localhost:8025`
+
+Local Docker uses Mailpit as an SMTP server, so registration does not require
+external SMTP credentials. After clicking **Send code**, open the Mailpit
+inbox and copy the verification code from the latest message.
 
 ## Test Accounts
 
@@ -74,3 +83,5 @@ These accounts are seeded for checking application functionality during review:
 - The backend automatically applies migrations on startup.
 - Test accounts and base data are created by `backend/app/db/seed.py`.
 - Local PostgreSQL runs in Docker and stores data in the `teamup_pgdata` volume.
+- The Mailpit inbox is available at `http://localhost:8025`; it is only for local development.
+# TeamUp

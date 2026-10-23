@@ -2,20 +2,15 @@
 set -e
 
 echo "Starting local TeamUp stack..."
-docker compose up -d --build db backend
+docker compose up -d --build
 
 echo "Seeding local verification accounts and base data..."
 docker compose exec -T backend python /app/app/db/seed.py
 
-echo "Preparing frontend dependencies for this machine..."
-cd frontend
-rm -rf node_modules dist
-npm ci
-
 echo ""
 echo "Backend:  http://localhost:8000"
 echo "Swagger:  http://localhost:8000/docs"
-echo "Frontend: run 'cd frontend && npm run dev'"
+echo "Frontend: http://localhost:5173"
 echo ""
 echo "Test partner credentials:"
 echo "email:    partner.test@teamup.kg"

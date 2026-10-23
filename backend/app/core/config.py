@@ -14,10 +14,6 @@ ENV_FILES = (
 )
 
 
-def _running_in_docker() -> bool:
-    return Path("/.dockerenv").exists()
-
-
 def _is_placeholder(value: str | None) -> bool:
     if value is None:
         return False
@@ -26,7 +22,6 @@ def _is_placeholder(value: str | None) -> bool:
 
 
 class Settings(BaseSettings):
-    environment: str = "development"
     database_url: str | None = None
     database_scheme: str = Field(
         default="postgresql+psycopg",
@@ -60,15 +55,14 @@ class Settings(BaseSettings):
     primary_admin_email: str
     jwt_alg: str = "HS256"
     access_token_expire_min: int = 60
-    cors_origins: str = "https://teamup-kg.com,https://www.teamup-kg.com"
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080"
     auth_cookie_name: str = "teamup_session"
-    auth_cookie_secure: bool = True
+    auth_cookie_secure: bool = False
     auth_cookie_samesite: str = "lax"
     auth_cookie_domain: str | None = None
-    local_db_fallback_enabled: bool = False
     openai_api_key: str | None = None
     openai_model: str = "gpt-5-nano"
-    app_base_url: str = "https://teamup-kg.com"
+    app_base_url: str = "http://localhost:5173"
 
     smtp_host: str | None = None
     smtp_port: int = 587
@@ -133,39 +127,6 @@ class Settings(BaseSettings):
         raise ValueError(
             "DATABASE_URL must be set, or provide DATABASE_HOST, DATABASE_NAME, DATABASE_USER, and DATABASE_PASSWORD"
         )
-
-    @model_validator(mode="after")
-    def normalize_database_url_for_local_dev(self):
-        # Резервный режим включается только явно и работает только при локальном запуске (вне Docker).
-        # Это сохраняет поведение продакшена и стейджинга неизменным по умолчанию.
-        if not self.local_db_fallback_enabled:
-            return self
-        if _running_in_docker():
-            return self
-
-        try:
-            parsed = make_url(self.database_url)
-        except ArgumentError:
-            return self
-
-        if parsed.host == "db":
-            # Локальный docker-compose публикует Postgres на localhost:5434.
-            target_port = parsed.port if parsed.port and parsed.port != 5432 else 5434
-            self.database_url = parsed.set(host="localhost", port=target_port).render_as_string(
-                hide_password=False
-            )
-        return self
-
-    @model_validator(mode="after")
-    def validate_sensitive_defaults(self):
-        insecure_defaults = {
-            "dev_secret_change_later",
-            "teamup-prod-secret-change-this-immediately-2026",
-        }
-        if self.environment.lower() in {"production", "staging"}:
-            if self.jwt_secret in insecure_defaults or len(self.jwt_secret) < 32:
-                raise ValueError("JWT_SECRET must be unique and at least 32 characters in non-development environments")
-        return self
 
     @model_validator(mode="after")
     def normalize_primary_admin_email(self):

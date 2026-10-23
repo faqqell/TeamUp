@@ -11,16 +11,6 @@ ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_ENABLE_DEMO=$VITE_ENABLE_DEMO
 
 RUN set -eux; \
-    APP_DIR="."; \
-    if [ ! -f package-lock.json ]; then \
-    if [ -f frontend/package-lock.json ]; then \
-    APP_DIR="frontend"; \
-    else \
-    echo "Could not find package-lock.json in either ./ or ./frontend." >&2; \
-    exit 1; \
-    fi; \
-    fi; \
-    cd "$APP_DIR"; \
     npm ci; \
     chmod +x node_modules/.bin/vite node_modules/vite/bin/vite.js 2>/dev/null || true; \
     npm run build; \

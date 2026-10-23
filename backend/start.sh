@@ -1,8 +1,7 @@
 #!/bin/sh
 set -e
 
-# Use `heads` instead of `head` so deploys don't crash if the environment
-# temporarily contains multiple Alembic heads before a merge migration lands.
+# Apply all local database migrations before starting the API.
 alembic upgrade heads
 python /app/app/db/seed.py
 

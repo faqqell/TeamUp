@@ -14,6 +14,7 @@
 - Frontend: `http://localhost:5173`
 - Backend API: `http://localhost:8000`
 - Swagger: `http://localhost:8000/docs`
+- Inbox for local verification emails: `http://localhost:8025`
 - Тестовый пользователь: `user.test@teamup.kg` / `User123!`
 - Тестовый партнёр: `partner.test@teamup.kg` / `Partner123!`
 - Тестовый админ: `admin@teamup.com` / `admin123`
@@ -24,6 +25,8 @@
 - `npm ci` заново ставит зависимости под текущий Mac, включая native optional packages для Vite/Rollup.
 - `vite.config.js` уже проксирует `/api` на локальный backend, поэтому CORS не мешает разработке.
 - Базовые данные и тестовые аккаунты `admin / user / partner` сидятся из `backend/app/db/seed.py`.
+- Для локальной регистрации Docker поднимает Mailpit вместо внешнего SMTP. После нажатия
+  «Отправить код» откройте `http://localhost:8025` и возьмите код из письма.
 
 ## Самый простой вариант (рекомендуется)
 
