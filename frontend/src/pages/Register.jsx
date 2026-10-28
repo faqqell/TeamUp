@@ -197,7 +197,8 @@ export default function Register({ onAuth }) {
        value={form.password}
        onChange={(e) => update('password', e.target.value)}
        required
-       minLength={8}
+       minLength={6}
+       pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}"
       />
      </div>
 

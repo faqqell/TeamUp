@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 
 from app.core.config import settings
 
-PASSWORD_MIN_LENGTH = 8
+PASSWORD_MIN_LENGTH = 6
 
 pwd_context = CryptContext(
     schemes=["argon2", "bcrypt"],

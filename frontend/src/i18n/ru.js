@@ -222,7 +222,7 @@
 	'auth.codeSentHint': 'Код отправлен. Проверьте входящие/спам и введите ниже.',
 	'auth.verificationCode': 'Код подтверждения',
 	'auth.codePlaceholder': 'Введите код из письма',
-	'auth.passwordCreatePlaceholder': 'Создайте пароль (мин. 8 символов)',
+	'auth.passwordCreatePlaceholder': 'Мин. 6 символов: заглавная, строчная буква и цифра',
 	'auth.iWantTo': 'Я хочу',
 	'auth.playGames': 'Играть',
 	'auth.listVenues': 'Площадки',

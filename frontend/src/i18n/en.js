@@ -222,7 +222,7 @@
 	'auth.codeSentHint': 'Code sent. Check inbox/spam and enter it below.',
 	'auth.verificationCode': 'Verification Code',
 	'auth.codePlaceholder': 'Enter code from email',
-	'auth.passwordCreatePlaceholder': 'Create a password (min 8 characters)',
+	'auth.passwordCreatePlaceholder': 'Min 6 characters: uppercase, lowercase, and a number',
 	'auth.iWantTo': 'I want to',
 	'auth.playGames': 'Play Games',
 	'auth.listVenues': 'List Venues',
