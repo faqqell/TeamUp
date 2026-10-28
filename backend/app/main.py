@@ -2,13 +2,12 @@ from fastapi import FastAPI
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from sqlalchemy.exc import IntegrityError, OperationalError
+from sqlalchemy.exc import IntegrityError, OperationalError, TimeoutError as SQLAlchemyTimeoutError
 
 from app.api.router import api_router
 from app.core.config import settings
 from app.core.db_errors import map_integrity_error
 from app.services.admin_access_service import sync_primary_admin_access
-from app.services.post_game_service import build_scheduler
 
 app = FastAPI(title="TeamUp API", version="0.1.0")
 
@@ -22,7 +21,6 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
-app.state.post_game_scheduler = None
 
 
 @app.exception_handler(IntegrityError)
@@ -41,6 +39,16 @@ def handle_operational_error(_: Request, __: OperationalError):
     )
 
 
+@app.exception_handler(SQLAlchemyTimeoutError)
+def handle_database_pool_timeout(_: Request, __: SQLAlchemyTimeoutError):
+    """Returns a retryable response when the database pool is temporarily full."""
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "Server is busy. Please retry shortly."},
+        headers={"Retry-After": "2"},
+    )
+
+
 @app.get("/")
 def health() -> dict[str, str]:
     """Проверка доступности API."""
@@ -51,15 +59,3 @@ def health() -> dict[str, str]:
 def startup_scheduler() -> None:
     """Инициализирует сервисы при старте приложения."""
     sync_primary_admin_access()
-    scheduler = build_scheduler()
-    app.state.post_game_scheduler = scheduler
-    if scheduler:
-        scheduler.start()
-
-
-@app.on_event("shutdown")
-def shutdown_scheduler() -> None:
-    """Корректно останавливает фоновые задачи при завершении приложения."""
-    scheduler = getattr(app.state, "post_game_scheduler", None)
-    if scheduler:
-        scheduler.stop()

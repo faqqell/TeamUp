@@ -47,6 +47,9 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("DATABASE_PASSWORD", "DB_PASSWORD", "POSTGRES_PASSWORD", "PGPASSWORD"),
     )
+    database_pool_size: int = 5
+    database_max_overflow: int = 5
+    database_pool_timeout: int = 5
     database_sslmode: str | None = Field(
         default=None,
         validation_alias=AliasChoices("DATABASE_SSLMODE", "DB_SSLMODE", "PGSSLMODE"),

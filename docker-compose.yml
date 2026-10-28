@@ -65,10 +65,49 @@ services:
       VERIFICATION_CODE_TTL_MIN: "10"
       VERIFICATION_RESEND_SEC: "60"
       VERIFICATION_CODE_LENGTH: "6"
-      POST_GAME_SCHEDULER_ENABLED: "true"
-      POST_GAME_POLL_SECONDS: "60"
+      POST_GAME_SCHEDULER_ENABLED: "false"
+      DATABASE_POOL_SIZE: "5"
+      DATABASE_MAX_OVERFLOW: "5"
+      DATABASE_POOL_TIMEOUT: "5"
     ports:
       - "8000:80"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1/').read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: teamup_local_worker
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    command: ["python", "-m", "app.worker"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://teamup:teamup@db:5432/teamup
+      JWT_SECRET: dev_secret_change_later_please_change
+      PRIMARY_ADMIN_EMAIL: admin@teamup.com
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_USER: ""
+      SMTP_PASSWORD: ""
+      SMTP_FROM_EMAIL: no-reply@teamup.local
+      SMTP_USE_TLS: "false"
+      SMTP_USE_SSL: "false"
+      POST_GAME_SCHEDULER_ENABLED: "true"
+      POST_GAME_POLL_SECONDS: "60"
+      DATABASE_POOL_SIZE: "2"
+      DATABASE_MAX_OVERFLOW: "2"
+      DATABASE_POOL_TIMEOUT: "5"
 
   frontend:
     build:

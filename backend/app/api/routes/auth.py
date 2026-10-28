@@ -1,4 +1,3 @@
-import logging
 from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
@@ -21,21 +20,18 @@ from app.schemas.auth import (
     SendVerificationCodeRequest,
     TokenResponse,
 )
-from app.services.email_service import EmailService
 from app.services.email_verification_service import (
     generate_numeric_code,
     hash_verification_code,
     validate_verification_code,
 )
+from app.services.task_crypto import encrypt_task_value
 from app.services.login_rate_limiter import login_rate_limiter, verification_code_rate_limiter
 from app.services.wallet_service import WalletService
 
 router = APIRouter(prefix="/auth")
 
 INITIAL_CREDITS = 0
-logger = logging.getLogger(__name__)
-
-
 def _get_client_ip(request: Request) -> str:
     """Извлекает IP клиента с учетом прокси-заголовка X-Forwarded-For."""
     forwarded_for = request.headers.get("x-forwarded-for")
@@ -88,18 +84,18 @@ def send_verification_code(
             )
         )
 
-    try:
-        EmailService.send_verification_code(email, code)
-    except Exception as exc:
-        db.rollback()
-        logger.warning("auth.send_code.failed email=%s reason=%s", email, exc)
-        raise HTTPException(
-            status_code=503,
-            detail="Could not send verification email right now. Please try again later.",
+    from app.models.email_task import EmailTask
+
+    db.add(
+        EmailTask(
+            recipient=email,
+            encrypted_code=encrypt_task_value(code),
+            code_hash=code_hash,
         )
+    )
 
     db.commit()
-    return {"detail": "Verification code sent"}
+    return {"detail": "Verification code queued for delivery"}
 
 
 @router.post("/register", response_model=TokenResponse)

@@ -1,5 +1,6 @@
 from app.models.availability import VenueSlot
 from app.models.email_verification import EmailVerificationCode
+from app.models.email_task import EmailTask
 from app.models.event import Event
 from app.models.event_rating import EventRating
 from app.models.notification import Notification
@@ -29,4 +30,5 @@ __all__ = [
     "WalletTransaction",
     "Notification",
     "EmailVerificationCode",
+    "EmailTask",
 ]

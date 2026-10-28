@@ -8,6 +8,7 @@ class Base(DeclarativeBase):
 # noqa: F401 - импорт моделей нужен для автогенерации Alembic
 from app.models import (  # isort:skip
     availability,
+    email_task,
     email_verification,
     event,
     event_rating,
